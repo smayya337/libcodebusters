@@ -1,5 +1,15 @@
-# libcodebusters
-Cipher encode and decode methods in various languages!
+# libcodebusters (Python edition)
+Cipher encode and decode methods in various languages! This is the Python version.
 
-## Repo structure
-The `master` branch will be left blank. New branches will be created with the name of the language the `libcodebusters` port is written in (e.g. `java` for the Java port).
+Here's what it can do:
+
+|Encrypt|Decrypt|
+|:--:|:--:|
+|Affine|Affine|
+|Aristocrat|Atbash|
+|Atbash|Caesar|
+|Caesar|Rail Fence|
+|Hill|Vigenere|
+|Patristocrat|
+|Rail Fence|
+|Vigenere|
