@@ -1,5 +1,6 @@
-# libcodebusters (Python edition)
-Cipher encode and decode methods in various languages! This is the Python version.
+# libcodebusters
+
+`libcodebusters` is my attempt at programming a variety of cipher encode and decode methods!
 
 Here's what it can do:
 
