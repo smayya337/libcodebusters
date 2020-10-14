@@ -1,5 +1,6 @@
 import random
 import numpy
+import math
 
 
 def isLetter(i: int):
@@ -10,25 +11,28 @@ def alphMap():
     used = []
     for i in range(0, 26):
         used.append(False)
-    map = []
+    mapped: list = []
     for i in range(0, 26):
         newval: int = random.randint(0, 25)
         while newval == i or used[newval]:
             newval: int = random.randint(0, 25)
         used[newval] = True
-        map.append(newval)
-    return map
+        mapped.append(newval)
+    return mapped
 
 
-def rail(characters, divisor: int, text: str):
-    matrix(characters, divisor, "rows", text)
-    out = [str(c) for character in characters for c in character if str(c) != "None"]
-    return "".join(out)
-
-
-def genArr(text: str):
-    arr: list = [ord(l) for l in text]
-    return arr
+def rail(text: str, divisor: int, mode: str):
+    characters: numpy.array = []
+    textLen: int = len(text)
+    val: int = math.ceil(len(text) / divisor)
+    while len(text) < (val * divisor):
+        text += " "
+    if mode == "encrypt":
+        characters = numpy.array(list(text)).reshape(val, divisor).T
+    elif mode == "decrypt":
+        characters = numpy.array(list(text)).reshape(divisor, val).T
+    out = [str(c) for character in characters for c in character]
+    return "".join(out)[0:textLen]
 
 
 def vigKeyArr(text: str, arr: list):
@@ -43,24 +47,6 @@ def vigKeyArr(text: str, arr: list):
         else:
             keyChar.append(0)
     return keyChar
-
-
-def matrix(characters, divisor, mode, text):
-    rowToUse: int = 0
-    columnToUse: int = 0
-    for i in range(0, len(text)):
-        characters[rowToUse][columnToUse] = text[i]
-        if mode == "columns":
-            columnToUse += 1
-            if columnToUse % divisor == 0:
-                rowToUse += 1
-                columnToUse = 0
-        else:
-            rowToUse += 1
-            if rowToUse % divisor == 0:
-                columnToUse += 1
-                rowToUse = 0
-    return characters
 
 
 def rot(text: str, val: int):
@@ -87,6 +73,7 @@ def atbash(text: str):
 
 
 def modInverse(i: int):
+    i = i % 26
     if i == 1:
         return 1
     elif i == 3:
@@ -113,13 +100,34 @@ def modInverse(i: int):
         return 25
 
 
-def affineConv(text: str, map: list):
+def convert(text: str, mapped: list):
     out: str = ""
     text = text.upper()
     for i in range(0, len(text)):
         ascii_val: int = ord(text[i])
         if isLetter(ascii_val):
-            out += map[ascii_val - 65]
+            out += mapped[ascii_val - 65]
         else:
             out += chr(ascii_val)
     return out
+
+
+def lettersOnly(text: str):
+    chars: list = [l for l in text if isLetter(ord(l))]
+    return "".join(chars)
+
+
+def charToNumMatrix(matrix: numpy.array):
+    nums: numpy.array = numpy.empty((len(matrix), len(matrix[0])), dtype='int')
+    for i in range(0, len(matrix)):
+        for j in range(0, len(matrix[i])):
+            nums[i][j] = ord(matrix[i][j]) - 65
+    return nums
+
+
+def numToString(matrix: numpy.array):
+    chars: str = ""
+    for i in range(0, len(matrix[0])):
+        for j in range(0, len(matrix)):
+            chars += chr(matrix[j][i] % 26 + 65)
+    return chars

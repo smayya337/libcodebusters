@@ -1,5 +1,7 @@
 import numpy
 import Utils
+import math
+import sympy
 
 
 def rot(ciphertext: str, val: int):
@@ -11,7 +13,7 @@ def vigenere(ciphertext: str, key: str):
     plaintext: str = ""
     ciphertext = ciphertext.upper()
     key = key.upper()
-    cipherChar: list = Utils.genArr(ciphertext)
+    cipherChar: list = [ord(l) for l in ciphertext]
     keyChar: list = Utils.vigKeyArr(key, cipherChar)
     for i in range(0, len(cipherChar)):
         if Utils.isLetter(cipherChar[i]):
@@ -23,11 +25,7 @@ def vigenere(ciphertext: str, key: str):
 
 def railFence(ciphertext: str, val: int):
     ciphertext = ciphertext.upper()
-    rows: int = int(len(ciphertext) / val) + 1
-    if len(ciphertext) % val == 0:
-        rows -= 1
-    characters: numpy.array = numpy.empty((rows, val), dtype='object')
-    return Utils.rail(characters, rows, ciphertext)
+    return Utils.rail(ciphertext, val, "decrypt")
 
 
 def atbash(ciphertext: str):
@@ -35,10 +33,26 @@ def atbash(ciphertext: str):
 
 
 def affine(ciphertext: str, a: int, b: int):
-    map: list = []
+    mapped: list = []
     for i in range(0, 26):
         newVal: int = (Utils.modInverse(a) * (i - b)) % 26
         while newVal < 0:
             newVal += 26
-        map[i] = chr(newVal + 65)
-    return Utils.affineConv(ciphertext, map)
+        mapped[i] = chr(newVal + 65)
+    return Utils.convert(ciphertext, mapped)
+
+
+def hill(ciphertext: str, key: str):
+    ciphertext = Utils.lettersOnly(ciphertext.upper())
+    key = Utils.lettersOnly(key.upper())
+    lenVal: int = math.ceil(math.sqrt(len(key)))
+    squareVal: int = int(math.pow(lenVal, 2))
+    while len(key) < squareVal:
+        key += "Z"
+    while len(ciphertext) % lenVal != 0:
+        ciphertext += "Z"
+    plainMatrix: numpy.array = numpy.array(list(ciphertext)).reshape((int(len(ciphertext) / lenVal), lenVal)).T
+    keyMatrix: numpy.array = numpy.array(list(key)).reshape(lenVal, lenVal)
+    invKey = sympy.Matrix(Utils.charToNumMatrix(keyMatrix)).inv_mod(26)
+    productMatrix = numpy.matmul(invKey, Utils.charToNumMatrix(plainMatrix))
+    return Utils.numToString(productMatrix)
