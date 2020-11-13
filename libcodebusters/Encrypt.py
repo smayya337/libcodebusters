@@ -1,3 +1,4 @@
+import string
 import random
 import numpy
 from libcodebusters import Utils
@@ -88,3 +89,19 @@ def hill(plaintext: str, key: str):
 def affine(plaintext: str, a: int, b: int):
     alphMap: list = [chr((a * i + b) % 26 + 65) for i in range(0, 26)]
     return Utils.convert(plaintext, alphMap)
+
+
+def baconian(plaintext: str):
+    plaintext = Utils.lettersOnly(plaintext.upper())
+    punctuation: list = [c for c in string.punctuation]
+    numbers = [bin(c) for c in range(0, 26)]
+    numbers[9] = numbers[8]
+    numbers[21] = numbers[20]
+    aSym, bSym = random.sample(punctuation, 2)
+    ciphertext: str = ""
+    for l in plaintext:
+        binary = numbers[ord(l) - 65][2:]
+        while len(binary) < 5:
+            binary = "0" + binary
+        ciphertext += (binary.replace("0", aSym).replace("1", bSym) + " ")
+    return ciphertext.strip()
