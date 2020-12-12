@@ -4,12 +4,12 @@ import math
 import sympy
 
 
-def rot(ciphertext: str, val: int):
+def rot(ciphertext: str, val: int) -> str:
     ciphertext = ciphertext.upper()
     return Utils.rot(ciphertext, 26 - val)
 
 
-def vigenere(ciphertext: str, key: str):
+def vigenere(ciphertext: str, key: str) -> str:
     plaintext: str = ""
     ciphertext = ciphertext.upper()
     key = key.upper()
@@ -23,16 +23,16 @@ def vigenere(ciphertext: str, key: str):
     return plaintext
 
 
-def railFence(ciphertext: str, val: int):
+def railFence(ciphertext: str, val: int) -> str:
     ciphertext = ciphertext.upper()
     return Utils.rail(ciphertext, val, "decrypt")
 
 
-def atbash(ciphertext: str):
+def atbash(ciphertext: str) -> str:
     return Utils.atbash(ciphertext)
 
 
-def affine(ciphertext: str, a: int, b: int):
+def affine(ciphertext: str, a: int, b: int) -> str:
     mapped: list = []
     for i in range(0, 26):
         newVal: int = (Utils.modInverse(a) * (i - b)) % 26
@@ -42,7 +42,7 @@ def affine(ciphertext: str, a: int, b: int):
     return Utils.convert(ciphertext, mapped)
 
 
-def hill(ciphertext: str, key: str):
+def hill(ciphertext: str, key: str) -> str:
     ciphertext = Utils.lettersOnly(ciphertext.upper())
     key = Utils.lettersOnly(key.upper())
     lenVal: int = math.ceil(math.sqrt(len(key)))

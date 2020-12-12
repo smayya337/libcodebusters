@@ -12,9 +12,12 @@ Here's what it can do:
 |Baconian|Hill|
 |Caesar|Rail Fence|
 |Hill|Vigenere|
+|Morbit|
 |Patristocrat|
+|Pollux|
 |Rail Fence|
 |Vigenere|
+|Xenocrypt|
 
 I used the `numpy` and `sympy` libraries to create `libcodebusters`.
 

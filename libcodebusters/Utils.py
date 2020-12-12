@@ -3,11 +3,11 @@ import numpy
 import math
 
 
-def isLetter(i: int):
+def isLetter(i: int) -> bool:
     return 65 <= i <= 90
 
 
-def alphMap():
+def alphMap() -> list:
     used = []
     for i in range(0, 26):
         used.append(False)
@@ -21,7 +21,7 @@ def alphMap():
     return mapped
 
 
-def rail(text: str, divisor: int, mode: str):
+def rail(text: str, divisor: int, mode: str) -> str:
     characters: numpy.array = []
     textLen: int = len(text)
     val: int = math.ceil(len(text) / divisor)
@@ -35,7 +35,7 @@ def rail(text: str, divisor: int, mode: str):
     return "".join(out)[0:textLen]
 
 
-def vigKeyArr(text: str, arr: list):
+def vigKeyArr(text: str, arr: list) -> list:
     keyIndex: int = 0
     keyChar: list = []
     for i in range(0, len(arr)):
@@ -49,7 +49,7 @@ def vigKeyArr(text: str, arr: list):
     return keyChar
 
 
-def rot(text: str, val: int):
+def rot(text: str, val: int) -> str:
     out: str = ""
     for i in text:
         ascii_val: int = ord(i)
@@ -60,7 +60,7 @@ def rot(text: str, val: int):
     return out
 
 
-def atbash(text: str):
+def atbash(text: str) -> str:
     out: str = ""
     text = text.upper()
     for i in text:
@@ -72,7 +72,7 @@ def atbash(text: str):
     return out
 
 
-def modInverse(i: int):
+def modInverse(i: int) -> int:
     i = i % 26
     if i == 1:
         return 1
@@ -100,7 +100,7 @@ def modInverse(i: int):
         return 25
 
 
-def convert(text: str, mapped: list):
+def convert(text: str, mapped: list) -> str:
     out: str = ""
     text = text.upper()
     for i in range(0, len(text)):
@@ -112,12 +112,12 @@ def convert(text: str, mapped: list):
     return out
 
 
-def lettersOnly(text: str):
+def lettersOnly(text: str) -> str:
     chars: list = [l for l in text if isLetter(ord(l))]
     return "".join(chars)
 
 
-def charToNumMatrix(matrix: numpy.array):
+def charToNumMatrix(matrix: numpy.array) -> numpy.array:
     nums: numpy.array = numpy.empty((len(matrix), len(matrix[0])), dtype='int')
     for i in range(0, len(matrix)):
         for j in range(0, len(matrix[i])):
@@ -125,9 +125,49 @@ def charToNumMatrix(matrix: numpy.array):
     return nums
 
 
-def numToString(matrix: numpy.array):
+def numToString(matrix: numpy.array) -> str:
     chars: str = ""
     for i in range(0, len(matrix[0])):
         for j in range(0, len(matrix)):
             chars += chr(matrix[j][i] % 26 + 65)
     return chars
+
+
+def morse(text: str) -> str:
+    text = text.strip().upper()
+    ciphertext: str = ""
+    morse_code_dict = {"A": ".-", "B": "-...",
+                       "C": "-.-.", "D": "-..", "E": ".",
+                       "F": "..-.", "G": "--.", "H": "....",
+                       "I": "..", "J": ".---", "K": "-.-",
+                       "L": ".-..", "M": "--", "N": "-.",
+                       "O": "---", "P": ".--.", "Q": "--.-",
+                       "R": ".-.", "S": "...", "T": "-",
+                       "U": "..-", "V": "...-", "W": ".--",
+                       "X": "-..-", "Y": "-.--", "Z": "--.."}
+    for c in text:
+        if isLetter(ord(c)):
+            ciphertext += morse_code_dict[c]
+            ciphertext += "x"
+        elif c == " ":
+            ciphertext += "x"
+    if len(ciphertext) % 2 == 0 and ciphertext[-2:] == "xx":
+        ciphertext = ciphertext[:-2]
+    elif len(ciphertext) % 2 == 1 and ciphertext[-1:] == "x":
+        ciphertext = ciphertext[:-1]
+    return ciphertext
+
+
+def morseOut(out: str, clues: list, friendly: bool) -> str:
+    if friendly:
+        formatted: str = f"""{out} given that:
+    {clues[0][0]} = {clues[0][1]}
+    {clues[1][0]} = {clues[1][1]}
+    {clues[2][0]} = {clues[2][1]}
+    {clues[3][0]} = {clues[3][1]}
+    {clues[4][0]} = {clues[4][1]}
+    {clues[5][0]} = {clues[5][1]}
+    """
+        return formatted
+    else:
+        return out, {c[0]: c[1] for c in clues}
