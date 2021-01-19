@@ -7,7 +7,7 @@ def isLetter(i: int) -> bool:
     return 65 <= i <= 90
 
 
-def alphMap() -> list:
+def alphMap() -> list[int]:
     used = []
     for i in range(0, 26):
         used.append(False)
@@ -70,34 +70,6 @@ def atbash(text: str) -> str:
         else:
             out += chr(ascii_val)
     return out
-
-
-def modInverse(i: int) -> int:
-    i = i % 26
-    if i == 1:
-        return 1
-    elif i == 3:
-        return 9
-    elif i == 5:
-        return 21
-    elif i == 7:
-        return 15
-    elif i == 9:
-        return 3
-    elif i == 11:
-        return 19
-    elif i == 15:
-        return 7
-    elif i == 17:
-        return 23
-    elif i == 19:
-        return 11
-    elif i == 21:
-        return 15
-    elif i == 23:
-        return 17
-    else:
-        return 25
 
 
 def convert(text: str, mapped: list) -> str:
