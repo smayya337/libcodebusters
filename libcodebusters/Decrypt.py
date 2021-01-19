@@ -35,7 +35,7 @@ def atbash(ciphertext: str) -> str:
 def affine(ciphertext: str, a: int, b: int) -> str:
     mapped: list = []
     for i in range(0, 26):
-        newVal: int = (Utils.modInverse(a) * (i - b)) % 26
+        newVal: int = (pow(a, -1, 26) * (i - b)) % 26
         while newVal < 0:
             newVal += 26
         mapped[i] = chr(newVal + 65)
