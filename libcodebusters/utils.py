@@ -1,13 +1,14 @@
 import random
-import numpy
+from numpy import array, empty
 import math
+from typing import Union, List, Tuple, Dict
 
 
-def isLetter(i: int) -> bool:
+def is_letter(i: int) -> bool:
     return 65 <= i <= 90
 
 
-def alphMap() -> list[int]:
+def alph_map() -> List[int]:
     used = []
     for i in range(0, 26):
         used.append(False)
@@ -22,38 +23,38 @@ def alphMap() -> list[int]:
 
 
 def rail(text: str, divisor: int, mode: str) -> str:
-    characters: numpy.array = []
-    textLen: int = len(text)
+    characters: array = []
+    text_len: int = len(text)
     val: int = math.ceil(len(text) / divisor)
     while len(text) < (val * divisor):
         text += " "
     if mode == "encrypt":
-        characters = numpy.array(list(text)).reshape(val, divisor).T
+        characters = array(list(text)).reshape(val, divisor).T
     elif mode == "decrypt":
-        characters = numpy.array(list(text)).reshape(divisor, val).T
+        characters = array(list(text)).reshape(divisor, val).T
     out = [str(c) for character in characters for c in character]
-    return "".join(out)[0:textLen]
+    return "".join(out)[0:text_len]
 
 
-def vigKeyArr(text: str, arr: list) -> list:
-    keyIndex: int = 0
-    keyChar: list = []
+def vig_key_array(text: str, arr: list) -> List[str]:
+    key_index: int = 0
+    key_char: list = []
     for i in range(0, len(arr)):
-        if isLetter(arr[i]):
-            keyChar.append(ord(text[keyIndex]))
-            keyIndex += 1
-            if keyIndex == len(text):
-                keyIndex = 0
+        if is_letter(arr[i]):
+            key_char.append(ord(text[key_index]))
+            key_index += 1
+            if key_index == len(text):
+                key_index = 0
         else:
-            keyChar.append(0)
-    return keyChar
+            key_char.append(0)
+    return key_char
 
 
 def rot(text: str, val: int) -> str:
     out: str = ""
     for i in text:
         ascii_val: int = ord(i)
-        if isLetter(ascii_val):
+        if is_letter(ascii_val):
             out += chr((ascii_val - 65 + val) % 26 + 65)
         else:
             out += chr(ascii_val)
@@ -65,7 +66,7 @@ def atbash(text: str) -> str:
     text = text.upper()
     for i in text:
         ascii_val: int = ord(i)
-        if isLetter(ascii_val):
+        if is_letter(ascii_val):
             out += chr(155 - ascii_val)
         else:
             out += chr(ascii_val)
@@ -77,27 +78,27 @@ def convert(text: str, mapped: list) -> str:
     text = text.upper()
     for i in range(0, len(text)):
         ascii_val: int = ord(text[i])
-        if isLetter(ascii_val):
+        if is_letter(ascii_val):
             out += mapped[ascii_val - 65]
         else:
             out += chr(ascii_val)
     return out
 
 
-def lettersOnly(text: str) -> str:
-    chars: list = [l for l in text if isLetter(ord(l))]
+def letters_only(text: str) -> str:
+    chars: list = [l for l in text if is_letter(ord(l))]
     return "".join(chars)
 
 
-def charToNumMatrix(matrix: numpy.array) -> numpy.array:
-    nums: numpy.array = numpy.empty((len(matrix), len(matrix[0])), dtype='int')
+def char_to_num_matrix(matrix: array) -> array:
+    nums: array = empty((len(matrix), len(matrix[0])), dtype='int')
     for i in range(0, len(matrix)):
         for j in range(0, len(matrix[i])):
             nums[i][j] = ord(matrix[i][j]) - 65
     return nums
 
 
-def numToString(matrix: numpy.array) -> str:
+def num_to_string(matrix: array) -> str:
     chars: str = ""
     for i in range(0, len(matrix[0])):
         for j in range(0, len(matrix)):
@@ -118,7 +119,7 @@ def morse(text: str) -> str:
                        "U": "..-", "V": "...-", "W": ".--",
                        "X": "-..-", "Y": "-.--", "Z": "--.."}
     for c in text:
-        if isLetter(ord(c)):
+        if is_letter(ord(c)):
             ciphertext += morse_code_dict[c]
             ciphertext += "x"
         elif c == " ":
@@ -130,7 +131,7 @@ def morse(text: str) -> str:
     return ciphertext
 
 
-def morseOut(out: str, clues: list, friendly: bool) -> str:
+def morse_out(out: str, clues: list, friendly: bool) -> Union[str, Tuple[str, Dict[Union[str, int], Union[str, int]]]]:
     if friendly:
         formatted: str = f"""{out} given that:
     {clues[0][0]} = {clues[0][1]}
