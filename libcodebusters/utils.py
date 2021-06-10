@@ -144,3 +144,17 @@ def morse_out(out: str, clues: list, friendly: bool) -> Union[str, Tuple[str, Di
         return formatted
     else:
         return out, {c[0]: c[1] for c in clues}
+
+
+def tjso_atbash(text: str) -> str:
+    out: str = ""
+    text = text.upper()
+    for i in text:
+        ascii_val: int = ord(i)
+        if 65 <= ascii_val <= 77:
+            out += chr(142 - ascii_val)
+        elif 78 <= ascii_val <= 90:
+            out += chr(168 - ascii_val)
+        else:
+            out += chr(ascii_val)
+    return out

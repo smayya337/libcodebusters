@@ -6,6 +6,7 @@ import math
 
 
 def aristocrat(plaintext: str) -> str:
+    """Encodes text with the Aristocrat cipher."""
     ciphertext: str = ""
     alph_map: list = utils.alph_map()
     plaintext = plaintext.strip().upper()
@@ -19,21 +20,25 @@ def aristocrat(plaintext: str) -> str:
 
 
 def rot(plaintext: str, val: int) -> str:
+    """Encodes text with a ROT/Caesar cipher."""
     plaintext = plaintext.strip().upper()
     return utils.rot(plaintext, val)
 
 
 def random_rot(plaintext: str) -> str:
+    """Encodes text with a random ROT/Caesar cipher."""
     val: int = random.randint(0, 25)
     return rot(plaintext, val)
 
 
 def rail_fence(plaintext: str, val: int) -> str:
+    """Encodes text with the rail fence cipher."""
     plaintext = plaintext.strip().upper()
     return utils.rail(plaintext, val, "encrypt")
 
 
 def vigenere(plaintext: str, key: str) -> str:
+    """Encodes text with the Vigenere cipher."""
     ciphertext: str = ""
     plaintext = plaintext.strip().upper()
     key = key.upper()
@@ -48,6 +53,7 @@ def vigenere(plaintext: str, key: str) -> str:
 
 
 def patristocrat(plaintext: str) -> str:
+    """Encodes text with the Patristocrat cipher."""
     ciphertext: str = ""
     new_cipher: str = ""
     alph_map: list = utils.alph_map()
@@ -68,10 +74,12 @@ def patristocrat(plaintext: str) -> str:
 
 
 def atbash(plaintext: str) -> str:
+    """Encodes text with the Atbash cipher."""
     return utils.atbash(plaintext)
 
 
 def hill(plaintext: str, key: str) -> str:
+    """Encodes text with the Hill cipher."""
     plaintext = utils.letters_only(plaintext.strip().upper())
     key = utils.letters_only(key.upper())
     len_val: int = math.ceil(math.sqrt(len(key)))
@@ -87,11 +95,13 @@ def hill(plaintext: str, key: str) -> str:
 
 
 def affine(plaintext: str, a: int, b: int) -> str:
+    """Encodes text with the Affine cipher."""
     alph_map: list = [chr((a * i + b) % 26 + 65) for i in range(0, 26)]
     return utils.convert(plaintext, alph_map)
 
 
 def baconian(plaintext: str) -> str:
+    """Encodes text with the Baconian cipher."""
     plaintext = utils.letters_only(plaintext.strip().upper())
     punctuation: list = [c for c in string.punctuation]
     numbers = [bin(c) for c in range(0, 26)]
@@ -108,6 +118,7 @@ def baconian(plaintext: str) -> str:
 
 
 def morbit(plaintext: str, friendly: bool) -> str:
+    """Encodes text with the Morbit cipher."""
     ciphertext: str = utils.morse(plaintext)
     numbers: list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     random.shuffle(numbers)
@@ -125,6 +136,7 @@ def morbit(plaintext: str, friendly: bool) -> str:
 
 
 def pollux(plaintext: str, friendly: bool) -> str:
+    """Encodes text with the Morbit cipher."""
     ciphertext: str = utils.morse(plaintext)
     numbers: list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     random.shuffle(numbers)
@@ -142,6 +154,7 @@ def pollux(plaintext: str, friendly: bool) -> str:
 
 
 def xenocrypt(plaintext: str) -> str:
+    """Encodes text with the Xenocrypt/Spanish Aristocrat cipher."""
     ciphertext: str = ""
     used = []
     for i in range(0, 27):
@@ -167,14 +180,5 @@ def xenocrypt(plaintext: str) -> str:
 
 
 def tjso_atbash(plaintext: str) -> str:
-    ciphertext: str = ""
-    plaintext = plaintext.upper()
-    for i in plaintext:
-        ascii_val: int = ord(i)
-        if 65 <= ascii_val <= 77:
-            ciphertext += chr(77 - ascii_val)
-        elif 78 <= ascii_val <= 90:
-            ciphertext += chr(103 - ascii_val)
-        else:
-            ciphertext += chr(ascii_val)
-    return ciphertext
+    """Encodes text with the TJSO Atbash cipher."""
+    return utils.tjso_atbash(plaintext)

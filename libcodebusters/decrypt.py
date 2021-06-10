@@ -56,3 +56,7 @@ def hill(ciphertext: str, key: str) -> str:
     inv_key = Matrix(utils.char_to_num_matrix(key_matrix)).inv_mod(26)
     product_matrix = matmul(inv_key, utils.char_to_num_matrix(plain_matrix))
     return utils.num_to_string(product_matrix)
+
+
+def tjso_atbash(ciphertext: str) -> str:
+    return utils.tjso_atbash(ciphertext)
